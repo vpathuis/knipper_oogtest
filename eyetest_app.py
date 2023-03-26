@@ -117,19 +117,22 @@ class EyeTestApp(tk.Tk):
 
     def press_esc(self, _) -> None:
         """End test is Escape is pressed"""
-        self.end_eye_test()
+        if self.blinker:
+            self.end_eye_test()
 
     def press_up(self, _) -> None:
         """Make size bigger"""
-        self.blinker.increase_size()
-        self.size_text.set(f"Grootte = {str(self.blinker.size)}")
-        self.blinker.update()
+        if self.blinker:
+            self.blinker.increase_size()
+            self.size_text.set(f"Grootte = {str(self.blinker.size)}")
+            self.blinker.update()
 
     def press_down(self, _) -> None:
         """Make size smaller"""
-        self.blinker.decrease_size()
-        self.size_text.set(f"Grootte = {str(self.blinker.size)}")
-        self.blinker.update()
+        if self.blinker:
+            self.blinker.decrease_size()
+            self.size_text.set(f"Grootte = {str(self.blinker.size)}")
+            self.blinker.update()
 
     def press_space(self, _) -> None:
         """Report size"""
