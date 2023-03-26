@@ -108,23 +108,23 @@ class EyeTestApp(tk.Tk):
         self.size_text.set("Klaar!")
 
     def switch_blinker(self):
+        """Switch the orientation of the blinker after each second"""
         self.blinker.switch()
         self.blinker_switcher = self.after(1000, self.switch_blinker)
 
     def press_esc(self, event) -> None:
+        """End test is Escape is pressed"""
         self.end_eye_test()
 
     def press_up(self, event) -> None:
         """Make size bigger"""
         self.blinker.increase_size()
-        # self.size = self.size + 1 if self.size < self._max_size else self._max_size
         self.size_text.set(f"Grootte = {str(self.blinker.size)}")
         self.blinker.update()
 
     def press_down(self, event) -> None:
         """Make size smaller"""
         self.blinker.decrease_size()
-        # self.size = self.size - 1 if self.size > self._min_size else self._min_size
         self.size_text.set(f"Grootte = {str(self.blinker.size)}")
         self.blinker.update()
 
