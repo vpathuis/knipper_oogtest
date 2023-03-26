@@ -1,3 +1,5 @@
+"""The Blinker class contains the logic for the blinking cross in the eye test."""
+
 import datetime
 import logging
 import tkinter as tk
@@ -31,25 +33,31 @@ class Blinker:
 
     @property
     def x(self):
+        """Getter for x"""
         return self._x
 
     @property
     def y(self):
+        """Getter for y"""
         return self._y
 
     @property
     def size(self):
+        """Getter for size"""
         return self._size
 
     @property
     def row(self):
+        """Getter for row"""
         return self._row
 
     @property
     def column(self):
+        """Getter for column"""
         return self._column
 
     def clear(self):
+        """Clears the entire canvas"""
         self.canvas.delete(self._horizontal_line)
         self.canvas.delete(self._vertical_line)
 
@@ -70,9 +78,10 @@ class Blinker:
             )
 
     def switch(self) -> None:
+        """Switch orientation between vertical and horizontal"""
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self._orientation = 1 - self._orientation
-        _LOGGER.info(f"{now} switch to {self._orientation}")
+        _LOGGER.info("%s switch to %s", now,self._orientation)
         self.update()
 
     def move(self) -> bool:

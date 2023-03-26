@@ -1,7 +1,9 @@
+"""The EyeTestApp is a tkinter window defining the frames and canvas needed for the eye test."""
+
 import tkinter as tk
-from blinker import Blinker
 import csv
 import datetime
+from blinker import Blinker
 
 
 class EyeTestApp(tk.Tk):
@@ -17,6 +19,7 @@ class EyeTestApp(tk.Tk):
         super().__init__()
         self._step_size = 100
         self._score = []
+        self.blinker = None
 
         self.title("Knipper Oogtest")
 
@@ -53,7 +56,7 @@ class EyeTestApp(tk.Tk):
 
         # Create updatable text containing the current size of the blinker
         self.size_text = tk.StringVar()
-        self.size_text.set(f"Grootte = ..")
+        self.size_text.set("Grootte = ..")
         lbl_size = tk.Label(
             master=frm_orientation_text,
             textvariable=self.size_text,
@@ -86,8 +89,8 @@ class EyeTestApp(tk.Tk):
         self.bind("<space>", self.press_space)
         self.bind("<Escape>", self.press_esc)
 
-    def start_eye_test(self, event) -> None:
-        # Create and start the blinker
+    def start_eye_test(self, _) -> None:
+        """Create and start the blinker"""
         if self.blinker_switcher:
             self.after_cancel(self.blinker_switcher)
         self.canvas.focus_set()
@@ -112,24 +115,24 @@ class EyeTestApp(tk.Tk):
         self.blinker.switch()
         self.blinker_switcher = self.after(1000, self.switch_blinker)
 
-    def press_esc(self, event) -> None:
+    def press_esc(self, _) -> None:
         """End test is Escape is pressed"""
         self.end_eye_test()
 
-    def press_up(self, event) -> None:
+    def press_up(self, _) -> None:
         """Make size bigger"""
         self.blinker.increase_size()
         self.size_text.set(f"Grootte = {str(self.blinker.size)}")
         self.blinker.update()
 
-    def press_down(self, event) -> None:
+    def press_down(self, _) -> None:
         """Make size smaller"""
         self.blinker.decrease_size()
         self.size_text.set(f"Grootte = {str(self.blinker.size)}")
         self.blinker.update()
 
-    def press_space(self, event) -> None:
-        # Report size
+    def press_space(self, _) -> None:
+        """Report size"""
         if self.blinker:
             self.canvas.create_text(
                 self.blinker.x,
@@ -147,6 +150,7 @@ class EyeTestApp(tk.Tk):
                 self.end_eye_test()
 
     def export_score(self):
+        """Export the score to a csv file."""
         now = datetime.datetime.now().strftime("%Y-%m-%d %H%M%S")
         with open(f"score_{now}.csv", "w", encoding="UTF8", newline="") as f:
             writer = csv.writer(f, delimiter=";")

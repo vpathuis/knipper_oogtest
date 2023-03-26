@@ -1,3 +1,5 @@
+"""Main module for the Eye test."""
+
 import logging
 from eyetest_app import EyeTestApp
 
