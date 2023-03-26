@@ -15,12 +15,13 @@ class Blinker:
     _default_size: int = 10
 
     def __init__(
-        self, canvas: tk.Canvas, max_x: int, max_y: int, step_size: int
+        self, canvas: tk.Canvas, max_x: int, max_y: int, step_size: int, thickness: int
     ) -> None:
         self.canvas = canvas
         self._max_x = max_x
         self._max_y = max_y
         self._step_size = step_size
+        self._thickness = thickness
         self._x: int = self._step_size
         self._y: int = self._step_size
         self._size: int = self._default_size
@@ -68,20 +69,19 @@ class Blinker:
             self._horizontal_line = self.canvas.create_line(
                 (self._x - self._size, self._y, self._x + self._size, self._y),
                 fill="white",
-                width=1,
+                width=self._thickness,
             )
         else:
             self._vertical_line = self.canvas.create_line(
                 (self._x, self._y - self._size, self._x, self._y + self._size),
                 fill="white",
-                width=1,
+                width=self._thickness,
             )
 
     def switch(self) -> None:
         """Switch orientation between vertical and horizontal"""
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self._orientation = 1 - self._orientation
-        _LOGGER.info("%s switch to %s", now,self._orientation)
         self.update()
 
     def move(self) -> bool:

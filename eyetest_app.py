@@ -17,8 +17,10 @@ class EyeTestApp(tk.Tk):
     def __init__(self):
         # window = tk.Tk()
         super().__init__()
-        self._step_size = 100
+        self._step_size: int = 100
         self._score = []
+        self._thickness: int = 3
+        self._speed: int = 500
         self.blinker = None
 
         self.title("Knipper Oogtest")
@@ -37,15 +39,44 @@ class EyeTestApp(tk.Tk):
             text="Stapgrootte",
             font=("Arial 14 bold"),
         )
-        lbl_step_size.pack(side=tk.LEFT)
+        lbl_step_size.pack(side=tk.TOP)
         self.ent_step_size = tk.Entry(master=frm_user_input, bg="white", width=5)
         self.ent_step_size.insert(0, str(self._step_size))
-        self.ent_step_size.pack(side=tk.LEFT)
+        self.ent_step_size.pack(side=tk.TOP)
+
+        lbl_thickness = tk.Label(
+            master=frm_user_input,
+            text="Dikte",
+            font=("Arial 14 bold"),
+        )
+        lbl_thickness.pack(side=tk.TOP)
+        self.ent_thickness = tk.Entry(master=frm_user_input, bg="white", width=5)
+        self.ent_thickness.insert(0, str(self._thickness))
+        self.ent_thickness.pack(side=tk.TOP)
+
+        lbl_speed = tk.Label(
+            master=frm_user_input,
+            text="Snelheid",
+            font=("Arial 14 bold"),
+        )
+        lbl_speed.pack(side=tk.TOP)
+        self.ent_speed = tk.Entry(master=frm_user_input, bg="white", width=5)
+        self.ent_speed.insert(0, str(self._speed))
+        self.ent_speed.pack(side=tk.TOP)
+
         frm_user_input.place(x=50, y=50, anchor=tk.NW)
 
         btn_start = tk.Button(master=frm_user_input, text="Start")
         btn_start.pack(side=tk.LEFT)
         btn_start.bind("<Button-1>", self.start_eye_test)
+
+        btn_pause = tk.Button(master=frm_user_input, text="Pauze")
+        btn_pause.pack(side=tk.LEFT)
+        btn_pause.bind("<Button-1>", self.pause_test)
+
+        btn_stop = tk.Button(master=frm_user_input, text="Stop")
+        btn_stop.pack(side=tk.LEFT)
+        btn_stop.bind("<Button-1>", self.end_eye_test)
 
         # Frame for orientation text
         lbl_orientation_point = tk.Label(
@@ -96,24 +127,38 @@ class EyeTestApp(tk.Tk):
         self.canvas.focus_set()
         self.canvas.delete(tk.ALL)
         self._step_size = int(self.ent_step_size.get())
+        self._thickness = int(self.ent_thickness.get())
+        self._speed = int(self.ent_speed.get())
         self._score = []
 
-        self.blinker = Blinker(self.canvas, self.max_x, self.max_y, self._step_size)
-        self.blinker_switcher = self.after(1000, self.switch_blinker)
+        self.blinker = Blinker(
+            self.canvas, self.max_x, self.max_y, self._step_size, self._thickness
+        )
+        self.blinker_switcher = self.after(self._speed, self.switch_blinker)
         self.size_text.set(f"Grootte = {str(self.blinker.size)}")
 
-    def end_eye_test(self):
+    def end_eye_test(self, _) -> None:
         """Everything done"""
-        self.after_cancel(self.blinker_switcher)
-        self.blinker.clear()
-        self.blinker = None
-        self.export_score()
-        self.size_text.set("Klaar!")
+        if self.blinker:
+            self.after_cancel(self.blinker_switcher)
+            self.blinker.clear()
+            self.blinker = None
+            self.export_score()
+            self.size_text.set("Klaar!")
+
+    def pause_test(self, _) -> None:
+        """Pause the test or continue if paused"""
+        if self.blinker_switcher:
+            self.after_cancel(self.blinker_switcher)
+            self.blinker_switcher = None
+            self.blinker.clear()
+        else:
+            self.blinker_switcher = self.after(self._speed, self.switch_blinker)
 
     def switch_blinker(self):
         """Switch the orientation of the blinker after each second"""
         self.blinker.switch()
-        self.blinker_switcher = self.after(1000, self.switch_blinker)
+        self.blinker_switcher = self.after(self._speed, self.switch_blinker)
 
     def press_esc(self, _) -> None:
         """End test is Escape is pressed"""
