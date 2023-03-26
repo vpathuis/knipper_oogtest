@@ -70,9 +70,9 @@ class EyeTestApp(tk.Tk):
         btn_start.pack(side=tk.LEFT)
         btn_start.bind("<Button-1>", self.start_eye_test)
 
-        btn_pause = tk.Button(master=frm_user_input, text="Pauze")
-        btn_pause.pack(side=tk.LEFT)
-        btn_pause.bind("<Button-1>", self.pause_test)
+        self.btn_pause = tk.Button(master=frm_user_input, text="Pauze")
+        self.btn_pause.pack(side=tk.LEFT)
+        self.btn_pause.bind("<Button-1>", self.pause_test)
 
         btn_stop = tk.Button(master=frm_user_input, text="Stop")
         btn_stop.pack(side=tk.LEFT)
@@ -148,12 +148,15 @@ class EyeTestApp(tk.Tk):
 
     def pause_test(self, _) -> None:
         """Pause the test or continue if paused"""
-        if self.blinker_switcher:
-            self.after_cancel(self.blinker_switcher)
-            self.blinker_switcher = None
-            self.blinker.clear()
-        else:
-            self.blinker_switcher = self.after(self._speed, self.switch_blinker)
+        if self.blinker:
+            if self.blinker_switcher:
+                self.after_cancel(self.blinker_switcher)
+                self.blinker_switcher = None
+                self.blinker.clear()
+                self.btn_pause.configure(text="Verder")
+            else:
+                self.blinker_switcher = self.after(self._speed, self.switch_blinker)
+                self.btn_pause.configure(text="Pauze")
 
     def switch_blinker(self):
         """Switch the orientation of the blinker after each second"""
