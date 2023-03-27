@@ -65,17 +65,18 @@ class Blinker:
     def update(self):
         """Update the blinker on the canvas."""
         self.clear()
+        scaled_thickness = ((self._thickness * self._size) // 10) + 1
         if self._orientation == 0:
             self._horizontal_line = self.canvas.create_line(
                 (self._x - self._size, self._y, self._x + self._size, self._y),
                 fill="white",
-                width=self._thickness,
+                width=scaled_thickness,
             )
         else:
             self._vertical_line = self.canvas.create_line(
                 (self._x, self._y - self._size, self._x, self._y + self._size),
                 fill="white",
-                width=self._thickness,
+                width=scaled_thickness,
             )
 
     def switch(self) -> None:
