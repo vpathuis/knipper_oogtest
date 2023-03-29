@@ -4,6 +4,8 @@ import datetime
 import logging
 import tkinter as tk
 
+from grid import coordinates
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -15,47 +17,28 @@ class Blinker:
     _default_size: int = 10
 
     def __init__(
-        self, canvas: tk.Canvas, max_x: int, max_y: int, step_size: int, thickness: int
+        self, canvas: tk.Canvas, thickness: int, position: coordinates
     ) -> None:
         self.canvas = canvas
-        self._max_x = max_x
-        self._max_y = max_y
-        self._step_size = step_size
+        # self._max_x = max_x
+        # self._max_y = max_y
+        # self._step_size_x = step_size_x
+        # self._step_size_y = step_size_y
         self._thickness = thickness
-        self._x: int = self._step_size
-        self._y: int = self._step_size
+        self._x: int
+        self._y: int
+
         self._size: int = self._default_size
         self._orientation: int = 0  # horizontal / vertical
-        self._row: int = 0
-        self._column: int = 0
         self._vertical_line = None
         self._horizontal_line = None
+        self.move(position)
         self.update()
-
-    @property
-    def x(self):
-        """Getter for x"""
-        return self._x
-
-    @property
-    def y(self):
-        """Getter for y"""
-        return self._y
 
     @property
     def size(self):
         """Getter for size"""
         return self._size
-
-    @property
-    def row(self):
-        """Getter for row"""
-        return self._row
-
-    @property
-    def column(self):
-        """Getter for column"""
-        return self._column
 
     def clear(self):
         """Clears the entire canvas"""
@@ -85,22 +68,11 @@ class Blinker:
         self._orientation = 1 - self._orientation
         self.update()
 
-    def move(self) -> bool:
-        """Moves the blinker to the next postion. Returns False if last position is reached."""
-        self._x = self._x + self._step_size
-        self._column = self._column + 1
-        if self._x > self._max_x - self._step_size:
-            self._x = self._step_size
-            self._y = self.y + self._step_size
-            self._row = self._row + 1
-            self._column = 1
-
-        if self._y > self._max_y - self._step_size:
-            # no more positions to move to
-            _LOGGER.info("no more positions to move to")
-            return False
-
-        return True
+    def move(self, position):
+        """Moves the blinker to the given position"""
+        self._x = position.x
+        self._y = position.y
+        self.update()
 
     def increase_size(self) -> int:
         """Increases the size of the blinker and returns te size."""
