@@ -1,8 +1,8 @@
 import unittest
-from blinker import Blinker
+from src.blinker import Blinker
 import tkinter as tk
 
-from grid import coordinates
+from src.grid import coordinates
 
 
 class TestBlinker(unittest.TestCase):

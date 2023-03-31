@@ -1,9 +1,8 @@
 import tkinter as tk
 import unittest
-from unittest.mock import patch, call
 
-from eyetest_app import EyeTestApp
-from settings import UserSettings
+from src.eyetest_app import EyeTestApp
+from src.settings import UserSettings
 
 
 class TestEyeTestApp(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-from grid import EyeTestGrid, coordinates
+from src.grid import EyeTestGrid, coordinates
 import tkinter as tk
 
 from unittest.mock import MagicMock
