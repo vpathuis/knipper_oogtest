@@ -53,10 +53,10 @@ class TestGrid(unittest.TestCase):
         size_x = 3
         size_y = 2
         grid = EyeTestGrid(canvas, 3, 2)
-        self.assertEqual(grid.screen_position(), coordinates(250, 333))
+        self.assertEqual(grid.screen_position(), coordinates(40, 333))
         grid.move("F")
         grid.move("D")
-        self.assertEqual(grid.screen_position(), coordinates(500, 666))
+        self.assertEqual(grid.screen_position(), coordinates(373, 666))
 
 
 if __name__ == "__main__":

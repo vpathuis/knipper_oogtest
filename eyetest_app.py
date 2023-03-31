@@ -83,7 +83,7 @@ class EyeTestApp(tk.Tk):
 
         lbl_orientation_point = tk.Label(
             master=frm_orientation_text,
-            text="Kijk hier\nPage up/down: groter/kleiner\nSpatie als je beweging nog ziet\nPijltjes om rond te wandelen",
+            text="Start en kijk naar het bolletje\nPage up/down: groter/kleiner\nSpatie als je beweging nog ziet\nPijltjes om rond te wandelen",
             font=("Arial 14 bold"),
         )
 
@@ -151,6 +151,9 @@ class EyeTestApp(tk.Tk):
         self.canvas.delete(tk.ALL)
 
         self.settings = self.user_input.read()
+
+        h = self.canvas.winfo_height() / 2
+        self.canvas.create_oval(30,h-10,50,h+10, fill="black")
 
         self.grid = EyeTestGrid(
             self.canvas, self.settings.size_horizontal, self.settings.size_vertical
@@ -282,7 +285,7 @@ class EyeTestApp(tk.Tk):
         now = datetime.datetime.now().strftime("%Y-%m-%d %H%M%S")
         with open(f"score_{now}.csv", "w", encoding="UTF8", newline="") as f:
             writer = csv.writer(f, delimiter=";")
-            writer.writerows(self._score)
+            writer.writerows(self.grid.all_scores())
 
     def new_score(self):
         """Add a score label to the canvas at the current position"""

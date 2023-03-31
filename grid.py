@@ -44,9 +44,12 @@ class EyeTestGrid:
             pos.x - 1
         ]  # watch out, first get y-list, than x-element
 
+    def all_scores(self) -> list:
+        return self._score
+
     def screen_position(self) -> coordinates:
         """Calculates the screen position from the grid position"""
-        x = self.position.x * self._canvas.winfo_width() // (self._size.x + 1)
+        x = 40 + ((self.position.x - 1) * self._canvas.winfo_width() // (self._size.x))
         y = self.position.y * self._canvas.winfo_height() // (self._size.y + 1)
         return coordinates(x, y)
 
